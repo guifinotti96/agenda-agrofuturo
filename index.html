@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Agenda Agrofuturo</title>
+<link rel="icon" href="logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: barra lateral fixa com navegação (vira barra inferior no celular) + área de trabalho com cabeçalho de seção e painéis. */
+/* Identidade Agrofuturo: preto como base, laranja como destaque, branco no texto. Um tema escuro só, por escolha. */
+:root{
+  --bg:#0b0b0b; --surface:#151515; --surface-2:#1d1d1d; --ink:#f7f7f5; --muted:#a6a19b; --line:#2c2925;
+  --green:#ff7a00; --green-ink:#0b0b0b; --green-soft:#2c1806; --harvest:#ff9a2e; --harvest-soft:#2a1b0c;
+  --grad:linear-gradient(135deg,#ff5f00 0%,#ff8a00 55%,#ffa52e 100%);
+  --c-meta:#6f9cff; --c-google:#f2cf3c; --c-ind:#35d0bd; --c-outro:#a3a3a3;
+  --ok:#5fd27a; --ok-soft:#14301c; --bad:#ff6b5a; --bad-soft:#3a1712; --warn:#ffb020; --warn-soft:#2e2208;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+  --f-display:"Exo 2","Figtree",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;font-weight:700;letter-spacing:-.01em}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:236px 1fr;min-height:100%}
+.side{position:sticky;top:0;height:100vh;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.brand svg{flex:none}
+.brand b{font-size:18px;line-height:1.05;display:block}
+.brand span{font-size:11.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-weight:600}
+.nav a svg{width:19px;height:19px;flex:none}
+.nav a:hover{background:var(--surface-2);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--green-soft);color:var(--green)}
+.side-foot{margin-top:auto;font-size:12px;color:var(--muted);padding:0 8px;display:flex;flex-direction:column;gap:6px}
+.mode{display:inline-flex;align-items:center;gap:6px}
+.mode i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.mode.nuvem i{background:var(--ok)} .mode.local i{background:var(--warn)}
+
+main{min-width:0;padding-block:24px 48px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head h1{font-size:28px}
+.head p{margin:4px 0 0;color:var(--muted)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);padding:8px 13px;border-radius:8px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--surface-2)}
+.btn.pri{background:var(--grad);border-color:transparent;color:#0b0b0b}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.btn.danger.armed{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.sm{padding:5px 9px;font-size:13px}
+.btn.icon{padding:7px}
+.btn svg{width:16px;height:16px}
+.wa{color:#4fd389;border-color:color-mix(in srgb,#4fd389 35%,var(--line))}
+
+input[type=text],input[type=password],input[type=tel],input[type=email],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+textarea{min-height:92px;resize:vertical}
+.tools input,.tools select{width:auto}
+.tools input[type=search]{min-width:200px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted);min-width:0}
+label.f.full{grid-column:1/-1}
+.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.panel h2{font-size:16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.panel h2 small{font-family:var(--f-body);font-weight:500;font-size:12.5px;color:var(--muted)}
+.grid{display:grid;gap:16px}
+.g-kpi{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.kpi .l{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi .v{font-family:var(--f-display);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .v small{font-size:15px;color:var(--muted);font-weight:500}
+.kpi .d{font-size:12.5px;color:var(--muted)}
+.up{color:var(--ok)} .down{color:var(--bad)}
+
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(90px,140px) 1fr 44px;gap:10px;align-items:center;font-size:13.5px}
+.bar .t{height:12px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:6px;background:var(--green)}
+.bar .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cols{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:18px;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to top,transparent 0,transparent 37px,var(--line) 37px,var(--line) 38px);background-position:0 -1px}
+.cols .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0}
+.cols .c i{display:block;width:100%;max-width:46px;background:var(--harvest);border-radius:5px 5px 0 0;min-height:2px}
+.cols .c.last i{background:var(--green)}
+.cols .c span{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.cols-x{display:flex;gap:10px;margin-top:6px}
+.cols-x span{flex:1;text-align:center;font-size:12px;color:var(--muted);text-transform:capitalize}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.o-meta{color:var(--c-meta)} .o-google{color:var(--c-google)} .o-indicacao{color:var(--c-ind)} .o-outro{color:var(--c-outro)}
+.pill.st-ganho{background:var(--ok-soft);color:var(--ok)} .pill.st-perdido{background:var(--bad-soft);color:var(--bad)} .pill.st-aberto{background:var(--green-soft);color:var(--green)}
+.pill.ex{background:var(--harvest-soft);color:var(--harvest)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer} tbody tr.click:hover{background:var(--surface-2)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.sub{color:var(--muted);font-size:12.5px}
+.name{font-weight:650}
+
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .when{flex:none;width:58px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;line-height:1.15}
+.li .when small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.li .what{flex:1;min-width:0}
+.li .what b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li.done .what b{text-decoration:line-through;color:var(--muted)}
+.empty{color:var(--muted);text-align:center;padding:26px 12px;font-size:13.5px}
+.empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+
+/* Agenda */
+.ag{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.cal-head h2{margin:0}
+.cap::first-letter{text-transform:uppercase}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cal .wd{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-2)}
+.day{min-height:92px;padding:6px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0;background:var(--surface)}
+.day:hover{background:var(--surface-2)}
+.day.out{color:var(--muted);background:var(--surface-2)}
+.day .dn{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;width:24px;height:24px;display:grid;place-items:center;border-radius:50%}
+.day.today .dn{background:var(--green);color:var(--green-ink)}
+.day.sel{box-shadow:inset 0 0 0 2px var(--green)}
+.ev{font-size:11.5px;padding:1px 5px;border-radius:4px;background:var(--harvest-soft);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.done{opacity:.55;text-decoration:line-through}
+.more{font-size:11px;color:var(--muted)}
+
+/* Funis */
+.kanban-wrap{overflow-x:auto;padding-bottom:8px}
+.kanban{display:flex;gap:12px;align-items:flex-start;min-height:340px}
+.col{flex:0 0 268px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;max-height:calc(100vh - 210px)}
+.col header{padding:11px 12px 9px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.col header b{display:flex;justify-content:space-between;gap:8px;font-size:13.5px}
+.col header .sub{font-size:12px}
+.col.t-ganho header{box-shadow:inset 0 3px 0 var(--ok);border-radius:var(--r) var(--r) 0 0}
+.col.t-perdido header{box-shadow:inset 0 3px 0 var(--bad);border-radius:var(--r) var(--r) 0 0}
+.col .cards{padding:9px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:70px}
+.col.over{outline:2px dashed var(--green);outline-offset:-3px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 11px;cursor:grab;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.card:active{cursor:grabbing}
+.card.drag{opacity:.4}
+.card .top{display:flex;justify-content:space-between;gap:6px;align-items:flex-start}
+.card .top b{font-size:13.5px;line-height:1.25}
+.card .meta{font-size:12.5px;color:var(--muted)}
+.card .foot{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.adv{border:1px solid var(--line);background:var(--surface-2);border-radius:6px;padding:2px 7px;font-size:12px;cursor:pointer;color:var(--muted);font-weight:600}
+.adv:hover{color:var(--green);border-color:var(--green)}
+
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(10,18,12,.45);display:flex;align-items:flex-start;justify-content:center;z-index:50;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;width:100%;max-width:720px;box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column}
+.modal.narrow{max-width:520px}
+.modal header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal header h2{font-size:19px}
+.modal .body{padding:18px 20px;display:flex;flex-direction:column;gap:18px}
+.modal footer{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line);background:var(--surface-2);border-radius:0 0 14px 14px}
+.modal footer .sp{margin-right:auto}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.fgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sec-t{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--harvest);margin-bottom:-6px}
+.stages{display:flex;flex-direction:column;gap:8px}
+.stage-row{display:grid;grid-template-columns:minmax(0,1fr) 150px auto;gap:8px;align-items:center}
+
+.banner{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:8px;background:var(--warn-soft);color:var(--ink);font-size:13.5px;margin-bottom:16px}
+.banner b{color:var(--warn)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;z-index:80;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+.segs{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.segs button{border:0;background:none;padding:7px 12px;font-weight:600;cursor:pointer;color:var(--muted)}
+.segs button[aria-pressed="true"]{background:var(--green-soft);color:var(--green)}
+
+.ag-bar{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-bottom:14px}
+.ag-tit{font-size:18px;margin:0}
+.evc{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.list>.evc:last-child{border-bottom:0}
+.evc .when{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;line-height:1.15}
+.evc .when small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.evc .what{min-width:0;cursor:pointer;display:flex;flex-wrap:wrap;gap:3px 6px;align-items:center}
+.evc .what b{flex-basis:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evc .what .sub{flex-basis:100%}
+.evc .acts{display:flex;gap:6px;align-items:center}
+.evc.late .when{color:var(--bad)}
+.evc.done{opacity:.6} .evc.done .what b{text-decoration:line-through}
+.late-panel{margin-bottom:16px;border-color:color-mix(in srgb,var(--bad) 35%,var(--line))}
+.week{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.wk{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;min-width:0}
+.wk header{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px;border-bottom:1px solid var(--line);cursor:pointer}
+.wk header b{font-family:var(--f-display);font-size:15px}
+.wk.today{box-shadow:inset 0 3px 0 var(--green)} .wk.today header b{color:var(--green)}
+.wk.past header{color:var(--muted)}
+.wk .evc{grid-template-columns:44px minmax(0,1fr);}
+.wk .evc .acts{grid-column:2}
+.wk-empty{margin:10px 0 4px}
+.ev.late{background:var(--bad-soft)}
+.dots i.late{background:var(--bad)}
+@media (max-width:820px){.evc{grid-template-columns:44px minmax(0,1fr)}.evc .acts{grid-column:2}.ag-bar label.chk{margin-left:0!important}}
+.brand img,.mtop img{flex:none;border-radius:50%}
+.brand b,.mtop b{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.brand b .o,.mtop b .o{color:var(--green);font-size:inherit;letter-spacing:inherit;text-transform:inherit;margin:0}
+.mtop{display:none}
+.side{background:#000}
+.nav a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--green)}
+.head h1{font-weight:800}
+.kpi{border-top:2px solid var(--line)}
+.kpi:first-child{border-top-color:var(--green)}
+.cols .c i{background:#5a3512} .cols .c.last i{background:var(--grad)}
+.day.today .dn{background:var(--grad);color:#0b0b0b}
+.toast{background:var(--grad);color:#0b0b0b}
+@media (max-width:980px){.ag{grid-template-columns:1fr}}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;flex-direction:row;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line);z-index:40;gap:0}
+  .brand,.side-foot{display:none}
+  .mtop{display:flex;align-items:center;gap:10px;padding:12px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .mtop b{font-size:17px}
+  .mtop span{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:auto}
+  .nav a[aria-current="page"]{box-shadow:inset 0 3px 0 var(--green)}
+  .nav{flex-direction:row;width:100%;justify-content:space-around}
+  .nav a{flex-direction:column;gap:2px;font-size:10.5px;padding:6px 4px;flex:1;text-align:center}
+  main{padding-block:18px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .head h1{font-size:23px}
+  .g-kpi{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .kpi .v{font-size:24px}
+  .day{min-height:58px;padding:4px}
+  .day .ev{display:none}
+  .day .dots{display:flex}
+  .fgrid,.fgrid.three{grid-template-columns:1fr}
+  .tools input[type=search]{min-width:0;flex:1 1 100%}
+  .stage-row{grid-template-columns:minmax(0,1fr) auto}
+  .stage-row select{grid-column:1/2}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+.dots{display:none;gap:3px;flex-wrap:wrap}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--harvest)}
+@media (prefers-reduced-motion:no-preference){.modal{animation:pop .16s ease-out}@keyframes pop{from{transform:translateY(8px);opacity:.6}}}
+.login{min-height:100vh;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));background:radial-gradient(ellipse at top,#2a1505 0%,var(--bg) 60%)}
+.login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow)}
+.login-card img{width:132px;height:132px;margin:0 auto;border-radius:50%}
+.login-card h1{font-size:22px;text-align:center}
+.login-card p{margin:0;color:var(--muted);text-align:center;font-size:13.5px}
+.login-card form{display:flex;flex-direction:column;gap:12px}
+.login-card .btn.pri{justify-content:center;padding:11px}
+.linkbtn{background:none;border:0;color:var(--green);font-weight:600;cursor:pointer;padding:0;font-size:13.5px}
+.msg{font-size:13.5px;padding:9px 12px;border-radius:8px;background:var(--surface-2)}
+.msg.err{background:var(--bad-soft);color:var(--bad)} .msg.ok{background:var(--ok-soft);color:var(--ok)}
+.master{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 14px;border-radius:8px;background:var(--green-soft);margin-bottom:16px;font-size:13.5px}
+.master b{color:var(--green)} .master select{width:auto}
+</style>
+</head>
+<body>
+<div id="login" class="login" hidden></div>
+
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <div class="brand">
+      <img src="logo.webp" alt="Agrofuturo Fertilizantes" width="58" height="58">
+      <div><b><span class="o">Agro</span>futuro</b><span>Agenda de leads</span></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <span class="mode" id="mode"><i></i><span>Conectando…</span></span>
+      <span id="who"></span>
+    </div>
+  </aside>
+  <header class="mtop"><img src="logo.webp" alt="" width="36" height="36"><b><span class="o">Agro</span>futuro</b><span>Agenda de leads</span></header>
+  <main id="main"><div class="loading">Carregando sua agenda…</div></main>
+</div>
+<div id="modal-root"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+(() => {
+"use strict";
+// ---------- Constantes ----------
+const ORIGENS = {
+  meta:{nome:"Meta Ads"}, google:{nome:"Google Ads"}, indicacao:{nome:"Indicação"}, outro:{nome:"Outros"}
+};
+const CULTURAS = ["Soja","Milho","Café","Cana-de-açúcar","Algodão","Trigo","Feijão","Arroz","Sorgo","Pastagem","Citros","Hortifruti","Eucalipto","Pecuária"];
+const TIPOS_EV = {ligacao:"Ligação", whatsapp:"WhatsApp", retorno:"Retorno de ligação", reuniao:"Reunião online", followup:"Follow-up", outro:"Outro"};
+const TIPO_ETAPA = {aberto:"Em andamento", ganho:"Venda fechada", perdido:"Perdido"};
+const FUNIL_PADRAO = {nome:"Funil comercial", ordem:1, etapas:[
+  {id:"novo",nome:"Novo lead",tipo:"aberto"},
+  {id:"contato",nome:"Primeiro contato",tipo:"aberto"},
+  {id:"proposta",nome:"Proposta enviada",tipo:"aberto"},
+  {id:"negociacao",nome:"Negociação",tipo:"aberto"},
+  {id:"ganho",nome:"Venda fechada",tipo:"ganho"},
+  {id:"perdido",nome:"Perdido",tipo:"perdido"}
+]};
+const ICONS = {
+  dashboard:'<path d="M4 13h6V4H4zM14 20h6v-9h-6zM4 20h6v-4H4zM14 4v4h6V4z"/>',
+  clientes:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/>',
+  agenda:'<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  funis:'<path d="M3.5 4.5h17l-6.5 8v6l-4 2v-8z"/>',
+  relatorios:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+  configuracoes:'<circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5"/>'
+};
+const VIEWS = [["dashboard","Dashboard"],["clientes","Clientes"],["agenda","Agenda"],["funis","Funis"],["relatorios","Relatórios"],["configuracoes","Configurações"]];
+const svg = (k,extra="") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${ICONS[k]||k}</svg>`;
+const I_WA = '<path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 2.3 2.2 4.3 4.6 4.8l1-1.2 2 .9c-.2 1.3-1.2 2-2.4 2-3.6-.2-6.6-3.3-6.6-6.8 0-1.3.8-2.2 2-2.4l.9 2z"/>';
+const I_PLUS = '<path d="M12 5v14M5 12h14"/>';
+const I_X = '<path d="M6 6l12 12M18 6L6 18"/>';
+
+// ---------- Utilidades ----------
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hoje = () => ymd(new Date());
+const parseYmd = s => { const [y,m,d] = String(s).split("-").map(Number); return new Date(y, (m||1)-1, d||1); };
+const nf = new Intl.NumberFormat("pt-BR");
+const nf1 = new Intl.NumberFormat("pt-BR",{maximumFractionDigits:1});
+const brl = new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const fmtData = s => s ? parseYmd(s).toLocaleDateString("pt-BR",{day:"2-digit",month:"short"}).replace(".","") : "";
+const fmtDataLonga = s => parseYmd(s).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});
+const fmtIso = s => s ? new Date(s).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"}) : "";
+const digits = s => String(s||"").replace(/\D/g,"");
+const waLink = n => { let d = digits(n); if (!d) return ""; if (d.length <= 11) d = "55" + d; return "https://wa.me/" + d; };
+const pct = (a,b) => b ? Math.round(a/b*100) : 0;
+const daysAgo = n => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-n); return d; };
+
+let toastT;
+function toast(msg){ let t = $(".toast"); if(!t){ t = document.createElement("div"); t.className="toast"; t.setAttribute("role","status"); document.body.appendChild(t); } t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>{ t.hidden = true; }, 2600); }
+
+// ---------- Armazenamento (Supabase) ----------
+// Cada tabela guarda {id, owner_id, data}. As regras de acesso (RLS) no banco decidem quem lê e altera cada linha.
+const Store = {
+  sb:null, cache:{}, subs:{}, timers:{},
+  async load(col){
+    const {data, error} = await this.sb.from(col).select("id,owner_id,data");
+    if (error) throw error;
+    const m = {}; data.forEach(r => { m[r.id] = {...(r.data||{}), _owner:r.owner_id}; });
+    this.cache[col] = m; this.emit(col);
+  },
+  emit(col){ const arr = Object.entries(this.cache[col]||{}).map(([id,d]) => ({id, ...d})); (this.subs[col]||[]).forEach(cb => cb(arr)); },
+  watch(col, cb){
+    (this.subs[col] ||= []).push(cb);
+    this.load(col).catch(e => { toast("Não foi possível carregar os dados: " + (e.message||e)); cb([]); });
+    this.sb.channel("rt-"+col).on("postgres_changes", {event:"*", schema:"public", table:col}, () => {
+      clearTimeout(this.timers[col]); this.timers[col] = setTimeout(() => this.load(col).catch(()=>{}), 300);
+    }).subscribe();
+  },
+  clean(d){ const o = {...d}; delete o.id; delete o._owner; return o; },
+  async set(col, id, data, owner){
+    const body = this.clean(data);
+    const row = {id, data:body, updated_at:new Date().toISOString()};
+    if (owner) row.owner_id = owner;
+    const {error} = await this.sb.from(col).upsert(row);
+    if (error) throw error;
+    (this.cache[col] ||= {})[id] = {...body, _owner: owner || this.cache[col][id]?._owner || S.uid};
+    this.emit(col);
+  },
+  async update(col, id, patch){ const cur = (this.cache[col]||{})[id] || {}; return this.set(col, id, {...cur, ...patch}); },
+  async del(col, id){
+    const {error} = await this.sb.from(col).delete().eq("id", id);
+    if (error) throw error;
+    if (this.cache[col]) delete this.cache[col][id];
+    this.emit(col);
+  }
+};
+async function salvar(fn, okMsg){
+  try { await fn(); if (okMsg) toast(okMsg); return true; }
+  catch(e){
+    const c = e && e.code;
+    toast(c === "42501" ? "Você não tem permissão para alterar estes dados." : "Não foi possível salvar: " + (e.message || "tente de novo."));
+    return false;
+  }
+}
+
+// ---------- Estado ----------
+const S = {
+  leads:[], eventos:[], funis:[], usuarios:{}, uid:null, nomeConta:"", ready:{leads:false,eventos:false,funis:false},
+  view:"dashboard", funilId:null, agModo:"dia", agRef:null, agFin:false,
+  f:{q:"", origem:"", cultura:"", status:""}, rel:{periodo:"30", origem:""}
+};
+S.agModo = "dia"; S.agRef = hoje(); try{ S.agFin = localStorage.getItem("agrofuturo:agFin") === "1"; }catch{ S.agFin = false; }
+
+const funisOrd = () => [...S.funis].sort((a,b) => (a.ordem||0)-(b.ordem||0) || String(a.nome).localeCompare(b.nome));
+const funilDe = l => S.funis.find(f => f.id === l.funilId) || funisOrd()[0];
+const etapaDe = l => { const f = funilDe(l); if(!f) return null; return (f.etapas||[]).find(e => e.id === l.etapa) || (f.etapas||[])[0] || null; };
+const statusDe = l => etapaDe(l)?.tipo || "aberto";
+const leadPorId = id => S.leads.find(l => l.id === id);
+const meuPerfil = () => S.usuarios[S.uid] || {};
+const donoDe = l => l._owner || l.responsavel;
+const nomeUsuario = id => (S.usuarios[id] && (S.usuarios[id].nome || S.usuarios[id].email)) || "";
+const origemPill = o => { const k = ORIGENS[o] ? o : "outro"; return `<span class="pill o-${k}"><i></i>${esc(ORIGENS[k].nome)}</span>`; };
+const etapaPill = l => { const e = etapaDe(l); if(!e) return ""; return `<span class="pill st-${e.tipo}">${esc(e.nome)}</span>`; };
+const proxEvento = leadId => S.eventos.filter(e => e.leadId === leadId && !e.concluido && e.data >= hoje()).sort((a,b) => (a.data+a.hora).localeCompare(b.data+b.hora))[0];
+
+// ---------- Navegação ----------
+function renderNav(){
+  $("#nav").innerHTML = VIEWS.map(([k,n]) => `<a href="#${k}" data-v="${k}" ${S.view===k?'aria-current="page"':''}>${svg(k)}<span>${n}</span></a>`).join("");
+}
+$("#nav").addEventListener("click", e => { const a = e.target.closest("a[data-v]"); if(!a) return; e.preventDefault(); go(a.dataset.v); });
+function go(v){ S.view = v; try{ history.replaceState(null,"","#"+v); }catch{} renderNav(); renderView(); window.scrollTo(0,0); }
+
+// ---------- Views ----------
+const V = {};
+function renderView(){ const v = V[S.view]; $("#main").innerHTML = faixaMestre() + v.shell(); const fm = $("#ver-usuario"); if (fm) fm.addEventListener("change", e => { S.verUsuario = e.target.value; aplicarFiltro(); renderView(); }); v.bind && v.bind(); renderBody(); }
+function faixaMestre(){
+  if (!S.master) return "";
+  const us = Object.entries(S.usuarios).sort((a,b) => nomeUsuario(a[0]).localeCompare(nomeUsuario(b[0])));
+  return `<div class="master"><b>Conta mestre</b><span>Você vê os dados de todos os usuários.</span><label class="chk" style="margin-left:auto">Ver<select id="ver-usuario"><option value="">Toda a equipe</option>${us.map(([id]) => `<option value="${id}" ${S.verUsuario===id?"selected":""}>${esc(nomeUsuario(id) || "Usuário sem nome")}${id===S.uid?" (você)":""}</option>`).join("")}</select></label></div>`;
+}
+function renderBody(){ const el = $("#vb"); if (el) el.innerHTML = V[S.view].body(); V[S.view].after && V[S.view].after(); }
+
+// Dashboard
+V.dashboard = {
+  shell(){
+    const h = new Date().getHours(); const sauda = h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
+    const nome = (meuPerfil().nome || S.nomeConta || "").split(" ")[0];
+    return `<div class="head"><div><h1>${sauda}${nome ? ", "+esc(nome) : ""}</h1><p>${esc(fmtDataLonga(hoje()))}</p></div>
+      <div class="tools"><button class="btn" data-act="novo-ev">${svg(I_PLUS)}Compromisso</button><button class="btn pri" data-act="novo-lead">${svg(I_PLUS)}Novo cliente</button></div></div><div id="vb"></div>`;
+  },
+  body(){
+    const L = S.leads, t = hoje();
+    const abertos = L.filter(l => statusDe(l)==="aberto");
+    const d30 = daysAgo(30), d60 = daysAgo(60);
+    const novos = L.filter(l => new Date(l.criadoEm) >= d30).length;
+    const novosAnt = L.filter(l => { const d = new Date(l.criadoEm); return d >= d60 && d < d30; }).length;
+    const ganhos = L.filter(l => statusDe(l)==="ganho").length, perdidos = L.filter(l => statusDe(l)==="perdido").length;
+    const ha = abertos.reduce((s,l) => s + (+l.hectares||0), 0);
+    const evHoje = S.eventos.filter(e => e.data === t);
+    const evHojePend = evHoje.filter(e => !e.concluido).length;
+    const delta = novos - novosAnt;
+    const kpis = `<div class="grid g-kpi">
+      <div class="kpi"><span class="l">Leads em andamento</span><span class="v">${nf.format(abertos.length)}</span><span class="d">${nf.format(L.length)} clientes cadastrados</span></div>
+      <div class="kpi"><span class="l">Novos leads · 30 dias</span><span class="v">${nf.format(novos)}</span><span class="d ${delta>0?"up":delta<0?"down":""}">${delta>0?"+":""}${nf.format(delta)} vs. 30 dias anteriores</span></div>
+      <div class="kpi"><span class="l">Taxa de conversão</span><span class="v">${pct(ganhos, ganhos+perdidos)}<small>%</small></span><span class="d">${nf.format(ganhos)} vendas · ${nf.format(perdidos)} perdidos</span></div>
+      <div class="kpi"><span class="l">Área em negociação</span><span class="v">${nf.format(Math.round(ha))}<small> ha</small></span><span class="d">soma dos leads em andamento</span></div>
+      <div class="kpi"><span class="l">Compromissos hoje</span><span class="v">${nf.format(evHoje.length)}</span><span class="d">${evHojePend} pendente${evHojePend===1?"":"s"}</span></div>
+    </div>`;
+    // Origem (90 dias)
+    const d90 = daysAgo(90); const rec = L.filter(l => new Date(l.criadoEm) >= d90);
+    const porOrig = Object.keys(ORIGENS).map(k => [k, rec.filter(l => (ORIGENS[l.origem]?l.origem:"outro")===k).length]);
+    const maxO = Math.max(1, ...porOrig.map(x => x[1]));
+    const origem = `<div class="panel"><h2>Leads por origem <small>últimos 90 dias · ${nf.format(rec.length)} leads</small></h2><div class="bars">${porOrig.map(([k,n]) => `<div class="bar"><span class="lb">${origemPill(k)}</span><span class="t"><i style="width:${n/maxO*100}%;background:var(--c-${k==="indicacao"?"ind":k})"></i></span><span class="n">${n}</span></div>`).join("")}</div></div>`;
+    // Funil principal
+    const f = funisOrd()[0];
+    let funil = `<div class="panel"><h2>Funil de vendas</h2><div class="empty"><b>Nenhum funil criado</b>Crie seu funil em Funis.</div></div>`;
+    if (f){
+      const ls = L.filter(l => funilDe(l)?.id === f.id);
+      const cont = (f.etapas||[]).map(e => [e, ls.filter(l => etapaDe(l)?.id === e.id).length]);
+      const mx = Math.max(1, ...cont.map(x => x[1]));
+      funil = `<div class="panel"><h2>${esc(f.nome)} <small>${nf.format(ls.length)} leads</small></h2><div class="bars">${cont.map(([e,n]) => `<div class="bar"><span class="lb" title="${esc(e.nome)}">${esc(e.nome)}</span><span class="t"><i style="width:${n/mx*100}%;background:${e.tipo==="ganho"?"var(--ok)":e.tipo==="perdido"?"var(--bad)":"var(--green)"}"></i></span><span class="n">${n}</span></div>`).join("")}</div></div>`;
+    }
+    // Por mês
+    const now = new Date(); const meses = [];
+    for (let i=5;i>=0;i--){ const a = new Date(now.getFullYear(), now.getMonth()-i, 1), b = new Date(now.getFullYear(), now.getMonth()-i+1, 1); meses.push([a, L.filter(l => { const d = new Date(l.criadoEm); return d>=a && d<b; }).length]); }
+    const mxM = Math.max(4, ...meses.map(x => x[1]));
+    const top = Math.ceil(mxM/4)*4;
+    const mes = `<div class="panel"><h2>Novos leads por mês <small>escala até ${top}</small></h2><div class="cols">${meses.map(([a,n],i) => `<div class="c ${i===5?"last":""}"><span>${n}</span><i style="height:calc(${n/top} * (100% - 22px))"></i></div>`).join("")}</div><div class="cols-x">${meses.map(([a]) => `<span>${a.toLocaleDateString("pt-BR",{month:"short"}).replace(".","")}</span>`).join("")}</div></div>`;
+    // Próximos compromissos
+    const prox = S.eventos.filter(e => !e.concluido && e.data >= t).sort((a,b) => (a.data+(a.hora||"")).localeCompare(b.data+(b.hora||""))).slice(0,6);
+    const proxH = `<div class="panel"><h2>Próximos compromissos <small><a href="#agenda" data-go="agenda" class="sub">ver agenda</a></small></h2>${prox.length ? `<div class="list">${prox.map(evLi).join("")}</div>` : `<div class="empty"><b>Agenda livre</b>Use “Compromisso” para marcar uma ligação ou retorno.</div>`}</div>`;
+    // Atenção
+    const lim = daysAgo(7);
+    const parados = abertos.filter(l => new Date(l.atualizadoEm||l.criadoEm) < lim && !proxEvento(l.id)).sort((a,b) => String(a.atualizadoEm||a.criadoEm).localeCompare(b.atualizadoEm||b.criadoEm)).slice(0,6);
+    const atenc = `<div class="panel"><h2>Precisam de atenção <small>sem movimento há 7+ dias e sem compromisso</small></h2>${parados.length ? `<div class="list">${parados.map(l => `<div class="li click" data-lead="${l.id}" style="cursor:pointer"><div class="what"><b>${esc(l.nome)}</b><span class="sub">${esc([l.cultura, l.hectares?nf.format(l.hectares)+" ha":"", l.produto].filter(Boolean).join(" · "))}</span></div>${etapaPill(l)}</div>`).join("")}</div>` : `<div class="empty"><b>Tudo em dia</b>Nenhum lead parado no momento.</div>`}</div>`;
+    return `${kpis}<div class="grid g-2" style="margin-top:16px">${origem}${funil}${mes}${proxH}${atenc}</div>`;
+  }
+};
+function evLi(e){
+  const l = leadPorId(e.leadId);
+  return `<div class="li ${e.concluido?"done":""}" data-ev="${e.id}" style="cursor:pointer"><div class="when">${esc(e.hora||"—")}<small>${esc(e.data===hoje()?"hoje":fmtData(e.data))}</small></div><div class="what"><b>${esc(e.titulo||TIPOS_EV[e.tipo]||"Compromisso")}</b><span class="sub">${esc([TIPOS_EV[e.tipo], l?.nome].filter(Boolean).join(" · "))}</span></div></div>`;
+}
+
+// Clientes
+V.clientes = {
+  shell(){
+    const culturas = [...new Set([...CULTURAS, ...S.leads.map(l => l.cultura).filter(Boolean)])].sort();
+    return `<div class="head"><div><h1>Clientes</h1><p>Todos os leads e clientes cadastrados.</p></div><div class="tools"><button class="btn pri" data-act="novo-lead">${svg(I_PLUS)}Novo cliente</button></div></div>
+    <div class="tools" style="margin-bottom:14px">
+      <input type="search" id="f-q" placeholder="Buscar por nome, telefone, cidade, produto…" value="${esc(S.f.q)}" aria-label="Buscar">
+      <select id="f-origem" aria-label="Origem"><option value="">Todas as origens</option>${Object.entries(ORIGENS).map(([k,o]) => `<option value="${k}" ${S.f.origem===k?"selected":""}>${o.nome}</option>`).join("")}</select>
+      <select id="f-cultura" aria-label="Cultura"><option value="">Todas as culturas</option>${culturas.map(c => `<option ${S.f.cultura===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
+      <select id="f-status" aria-label="Situação"><option value="">Todas as situações</option>${Object.entries(TIPO_ETAPA).map(([k,n]) => `<option value="${k}" ${S.f.status===k?"selected":""}>${n}</option>`).join("")}</select>
+    </div><div id="vb"></div>`;
+  },
+  bind(){
+    $("#f-q").addEventListener("input", e => { S.f.q = e.target.value; renderBody(); });
+    ["origem","cultura","status"].forEach(k => $("#f-"+k).addEventListener("change", e => { S.f[k] = e.target.value; renderBody(); }));
+  },
+  body(){
+    const q = S.f.q.trim().toLowerCase();
+    const ls = S.leads.filter(l => {
+      if (S.f.origem && (ORIGENS[l.origem]?l.origem:"outro") !== S.f.origem) return false;
+      if (S.f.cultura && l.cultura !== S.f.cultura) return false;
+      if (S.f.status && statusDe(l) !== S.f.status) return false;
+      if (q){ const hay = [l.nome,l.telefone,l.whatsapp,l.cidade,l.produto,l.cultura,l.email,l.observacoes].join(" ").toLowerCase(); if (!hay.includes(q) && !(digits(q) && digits(l.telefone+l.whatsapp).includes(digits(q)))) return false; }
+      return true;
+    }).sort((a,b) => String(b.criadoEm).localeCompare(a.criadoEm));
+    if (!S.leads.length) return `<div class="panel empty"><b>Nenhum cliente cadastrado</b>Clique em “Novo cliente” para registrar o primeiro lead.</div>`;
+    if (!ls.length) return `<div class="panel empty"><b>Nada encontrado</b>Ajuste a busca ou os filtros.</div>`;
+    return `<p class="sub" style="margin:0 0 8px">${nf.format(ls.length)} de ${nf.format(S.leads.length)} clientes</p><div class="tbl-wrap"><table><thead><tr><th>Cliente</th><th>Contato</th><th>Cultura</th><th class="r">Hectares</th><th>Produto de interesse</th><th>Origem</th><th>Etapa</th><th>Cadastro</th></tr></thead><tbody>
+    ${ls.map(l => { const wa = waLink(l.whatsapp||l.telefone); return `<tr class="click" data-lead="${l.id}">
+      <td><span class="name">${esc(l.nome)}</span>${l.exemplo?' <span class="pill ex">exemplo</span>':""}<div class="sub">${esc(l.cidade||"")}</div></td>
+      <td><div class="num">${esc(l.telefone||"—")}</div>${wa?`<a class="btn sm wa" href="${wa}" target="_blank" rel="noopener" data-stop="1">${svg(I_WA)}WhatsApp</a>`:""}</td>
+      <td>${esc(l.cultura||"—")}</td><td class="r">${l.hectares?nf.format(l.hectares):"—"}</td><td>${esc(l.produto||"—")}</td>
+      <td>${origemPill(l.origem)}</td><td>${etapaPill(l)}</td><td class="sub num">${fmtIso(l.criadoEm)}</td></tr>`; }).join("")}
+    </tbody></table></div>`;
+  }
+};
+
+// Agenda
+const horaAgora = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const atrasado = e => !e.concluido && (e.data < hoje() || (e.data === hoje() && e.hora && e.hora < horaAgora()));
+const addDias = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate()+n); return ymd(d); };
+const inicioSemana = s => { const d = parseYmd(s); d.setDate(d.getDate() - ((d.getDay()+6)%7)); return ymd(d); };
+const ordEv = (a,b) => (a.data+(a.hora||"")).localeCompare(b.data+(b.hora||""));
+const evVisivel = e => S.agFin || !e.concluido;
+function evCard(e, mostrarDia){
+  const l = leadPorId(e.leadId); const wa = l && waLink(l.whatsapp||l.telefone); const late = atrasado(e);
+  return `<div class="evc ${late?"late":""} ${e.concluido?"done":""}">
+    <div class="when">${esc(e.hora||"—")}${mostrarDia?`<small>${esc(e.data===hoje()?"hoje":fmtData(e.data))}</small>`:""}</div>
+    <div class="what" data-ev="${e.id}"><b>${esc(e.titulo||TIPOS_EV[e.tipo]||"Compromisso")}</b><span class="sub">${esc((() => { const tt = e.titulo||""; return [tt.includes(TIPOS_EV[e.tipo]||"\u0000")?"":TIPOS_EV[e.tipo], l && !tt.includes(l.nome.split("·")[0].trim())?l.nome:"", l?.telefone].filter(Boolean).join(" · "); })())}</span>
+      ${late?`<span class="pill st-perdido">Atrasado</span>`:""}${e.concluido?`<span class="pill st-ganho">Finalizado</span>`:""}${(e.reagendamentos||[]).length?`<span class="pill">Reagendado ${e.reagendamentos.length}×</span>`:""}</div>
+    <div class="acts">${e.concluido
+      ? `<button class="btn sm" data-reabrir="${e.id}">Reabrir</button>`
+      : `<button class="btn sm pri" data-fin="${e.id}">Finalizar</button><button class="btn sm" data-reag="${e.id}">Reagendar</button>`}
+      ${wa?`<a class="btn sm icon wa" href="${wa}" target="_blank" rel="noopener" aria-label="WhatsApp" data-stop="1">${svg(I_WA)}</a>`:""}</div></div>`;
+}
+V.agenda = {
+  shell(){
+    return `<div class="head"><div><h1>Agenda</h1><p>Ligações, retornos e reuniões com seus clientes.</p></div><div class="tools"><button class="btn pri" data-act="novo-ev">${svg(I_PLUS)}Novo compromisso</button></div></div><div id="vb"></div>`;
+  },
+  body(){
+    const modo = S.agModo, ref = S.agRef, t = hoje();
+    let titulo, de, ate;
+    if (modo === "dia"){ de = ate = ref; titulo = fmtDataLonga(ref); }
+    else if (modo === "semana"){ de = inicioSemana(ref); ate = addDias(de, 6); titulo = `${fmtData(de)} a ${fmtData(ate)}`; }
+    else { const r = parseYmd(ref); de = ymd(new Date(r.getFullYear(), r.getMonth(), 1)); ate = ymd(new Date(r.getFullYear(), r.getMonth()+1, 0)); titulo = r.toLocaleDateString("pt-BR",{month:"long",year:"numeric"}); }
+    const noPeriodo = S.eventos.filter(e => e.data >= de && e.data <= ate);
+    const pend = noPeriodo.filter(e => !e.concluido).length, fin = noPeriodo.length - pend;
+    const atrasados = S.eventos.filter(e => atrasado(e) && (e.data < de || e.data > ate)).sort(ordEv);
+    const bar = `<div class="ag-bar"><div class="segs" role="group" aria-label="Visão">${[["dia","Dia"],["semana","Semana"],["mes","Mês"]].map(([k,n]) => `<button data-modo="${k}" aria-pressed="${modo===k}">${n}</button>`).join("")}</div>
+      <div class="tools"><button class="btn sm" data-nav="-1" aria-label="Anterior">‹</button><button class="btn sm" data-nav="0">Hoje</button><button class="btn sm" data-nav="1" aria-label="Próximo">›</button></div>
+      <h2 class="cap ag-tit">${esc(titulo)}</h2>
+      <span class="sub num">${pend} pendente${pend===1?"":"s"} · ${fin} finalizado${fin===1?"":"s"}</span>
+      <label class="chk" style="margin-left:auto"><input type="checkbox" id="ag-fin" ${S.agFin?"checked":""}> Mostrar finalizados</label></div>`;
+    const late = atrasados.length ? `<div class="panel late-panel"><h2>Atrasados de outros dias <small>${atrasados.length} sem finalizar</small></h2><div class="list">${atrasados.slice(0,5).map(e => evCard(e, true)).join("")}</div>${atrasados.length>5?`<p class="sub" style="margin:8px 0 0">e mais ${atrasados.length-5}. Veja na visão de mês.</p>`:""}</div>` : "";
+    const lista = (evs, vazio) => evs.length ? `<div class="list">${evs.map(e => evCard(e)).join("")}</div>` : `<div class="empty">${vazio}</div>`;
+    let corpo;
+    if (modo === "dia"){
+      const evs = S.eventos.filter(e => e.data === ref && evVisivel(e)).sort(ordEv);
+      corpo = `<div class="panel">${lista(evs, `<b>Nenhum compromisso</b>${S.agFin?"Nada marcado para este dia.":"Nada pendente neste dia."}`)}<button class="btn" data-act="novo-ev" data-dia="${ref}" style="margin-top:12px;width:100%;justify-content:center">${svg(I_PLUS)}Marcar neste dia</button></div>`;
+    } else if (modo === "semana"){
+      const dias = Array.from({length:7}, (_,i) => addDias(de, i));
+      corpo = `<div class="week">${dias.map(k => { const evs = S.eventos.filter(e => e.data === k && evVisivel(e)).sort(ordEv); const d = parseYmd(k);
+        return `<section class="wk ${k===t?"today":""} ${k<t?"past":""}"><header data-dia="${k}" data-modo-dia="1" role="button" tabindex="0"><b class="cap">${esc(d.toLocaleDateString("pt-BR",{weekday:"short"}).replace(".",""))}</b><span class="num">${d.getDate()}/${pad(d.getMonth()+1)}</span></header>${evs.length ? `<div class="list">${evs.map(e => evCard(e)).join("")}</div>` : `<p class="sub wk-empty">Livre</p>`}</section>`; }).join("")}</div>`;
+    } else {
+      const r = parseYmd(ref), y = r.getFullYear(), mo = r.getMonth(), first = new Date(y, mo, 1);
+      const start = new Date(y, mo, 1 - ((first.getDay()+6)%7)); const cells = [];
+      for (let i=0;i<42;i++){
+        const d = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i); const k = ymd(d);
+        if (i>=35 && d.getMonth()!==mo) break;
+        const evs = S.eventos.filter(e => e.data === k && evVisivel(e)).sort(ordEv);
+        cells.push(`<div class="day ${d.getMonth()!==mo?"out":""} ${k===t?"today":""} ${k===ref?"sel":""}" data-dia="${k}" role="button" tabindex="0" aria-label="${esc(fmtDataLonga(k))}, ${evs.length} compromissos">
+          <span class="dn">${d.getDate()}</span>${evs.slice(0,3).map(e => `<span class="ev ${e.concluido?"done":""} ${atrasado(e)?"late":""}">${esc((e.hora?e.hora+" ":"")+(e.titulo||TIPOS_EV[e.tipo]||""))}</span>`).join("")}${evs.length>3?`<span class="more">+${evs.length-3}</span>`:""}
+          <span class="dots">${evs.slice(0,4).map(e => `<i class="${atrasado(e)?"late":""}"></i>`).join("")}</span></div>`);
+      }
+      const evs = S.eventos.filter(e => e.data === ref && evVisivel(e)).sort(ordEv);
+      corpo = `<div class="ag"><div class="panel"><div class="cal">${["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].map(w => `<div class="wd">${w}</div>`).join("")}${cells.join("")}</div></div>
+        <div class="panel"><h2 class="cap">${esc(fmtDataLonga(ref))}</h2>${lista(evs, `<b>Nenhum compromisso</b>${S.agFin?"Nada marcado para este dia.":"Nada pendente neste dia."}`)}
+        <button class="btn" data-act="novo-ev" data-dia="${ref}" style="margin-top:12px;width:100%;justify-content:center">${svg(I_PLUS)}Marcar neste dia</button></div></div>`;
+    }
+    return `${bar}${late}${corpo}`;
+  },
+  after(){ const c = $("#ag-fin"); if (c) c.addEventListener("change", () => { S.agFin = c.checked; try{ localStorage.setItem("agrofuturo:agFin", c.checked?"1":""); }catch{} renderBody(); }); }
+};
+async function finalizarEv(id, sim){
+  await salvar(() => Store.update("eventos", id, sim ? {concluido:true, concluidoEm:new Date().toISOString()} : {concluido:false, concluidoEm:null}), sim ? "Compromisso finalizado." : "Compromisso reaberto.");
+}
+function modalReagendar(id){
+  const e = S.eventos.find(x => x.id === id); if (!e) return;
+  const l = leadPorId(e.leadId);
+  const base = e.data < hoje() ? hoje() : e.data;
+  const ov = abrirModal(`<header><h2>Reagendar</h2><button class="btn icon" data-close aria-label="Fechar">${svg(I_X)}</button></header>
+    <form id="rf"><div class="body">
+      <p style="margin:0"><b>${esc(e.titulo||TIPOS_EV[e.tipo]||"Compromisso")}</b>${l?` · ${esc(l.nome)}`:""}<br><span class="sub">Marcado para ${esc(fmtDataLonga(e.data))}${e.hora?` às ${esc(e.hora)}`:""}</span></p>
+      <div class="tools"><button type="button" class="btn sm" data-q="${addDias(hoje(),1)}">Amanhã</button><button type="button" class="btn sm" data-q="${addDias(hoje(),2)}">Em 2 dias</button><button type="button" class="btn sm" data-q="${addDias(hoje(),7)}">Em 1 semana</button></div>
+      <div class="fgrid"><label class="f">Nova data<input type="date" id="r-data" value="${esc(addDias(base,1))}" required></label><label class="f">Hora<input type="time" id="r-hora" value="${esc(e.hora||"09:00")}"></label>
+      <label class="f full">Motivo (opcional)<input type="text" id="r-mot" placeholder="Ex.: cliente pediu para ligar depois da colheita"></label></div>
+    </div><footer><span class="sp"></span><button type="button" class="btn" data-close>Cancelar</button><button type="submit" class="btn pri">Reagendar</button></footer></form>`, "narrow");
+  ov.addEventListener("click", ev => { if (ev.target.closest("[data-close]")) fecharModal(); const q = ev.target.closest("[data-q]"); if (q) $("#r-data").value = q.dataset.q; });
+  $("#rf").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const data = $("#r-data").value, hora = $("#r-hora").value, mot = $("#r-mot").value.trim();
+    if (!data){ toast("Escolha a nova data."); return; }
+    const hist = [...(e.reagendamentos||[]), {data:e.data, hora:e.hora||"", em:new Date().toISOString(), motivo:mot}];
+    const notas = mot ? `${e.notas ? e.notas + "\n" : ""}Reagendado de ${fmtData(e.data)} ${e.hora||""}: ${mot}` : (e.notas||"");
+    if (await salvar(() => Store.update("eventos", id, {data, hora, concluido:false, reagendamentos:hist, notas}), `Reagendado para ${fmtData(data)}${hora?" às "+hora:""}.`)){
+      if (e.leadId) Store.update("leads", e.leadId, {atualizadoEm:new Date().toISOString()}).catch(()=>{});
+      fecharModal();
+    }
+  });
+}
+
+// Funis
+V.funis = {
+  shell(){
+    const fs = funisOrd();
+    if (!S.funilId || !fs.find(f => f.id === S.funilId)) S.funilId = fs[0]?.id || null;
+    return `<div class="head"><div><h1>Funis de venda</h1><p>Arraste os cards entre as etapas ou use “Avançar”.</p></div>
+      <div class="tools">${fs.length ? `<select id="f-funil" aria-label="Funil">${fs.map(f => `<option value="${f.id}" ${f.id===S.funilId?"selected":""}>${esc(f.nome)}</option>`).join("")}</select>${S.master?`<button class="btn" data-act="edit-funil">Editar funil</button>`:""}`:""}${S.master?`<button class="btn" data-act="novo-funil">${svg(I_PLUS)}Novo funil</button>`:""}<button class="btn pri" data-act="novo-lead">${svg(I_PLUS)}Novo cliente</button></div></div><div id="vb"></div>`;
+  },
+  bind(){ const s = $("#f-funil"); if (s) s.addEventListener("change", e => { S.funilId = e.target.value; renderBody(); }); },
+  body(){
+    const f = S.funis.find(x => x.id === S.funilId);
+    if (!f) return `<div class="panel empty"><b>Nenhum funil criado ainda</b>Comece com o funil comercial padrão (Novo lead → Primeiro contato → Proposta → Negociação → Venda fechada) e ajuste depois.<div style="margin-top:14px">${S.master?`<button class="btn pri" data-act="funil-padrao">Criar funil padrão</button>`:`<span class="sub">Peça à conta mestre para criar o funil.</span>`}</div></div>`;
+    const ls = S.leads.filter(l => funilDe(l)?.id === f.id);
+    const et = f.etapas || [];
+    return `<div class="kanban-wrap"><div class="kanban">${et.map((e,i) => {
+      const cs = ls.filter(l => etapaDe(l)?.id === e.id).sort((a,b) => String(b.atualizadoEm||b.criadoEm).localeCompare(a.atualizadoEm||a.criadoEm));
+      const ha = cs.reduce((s,l) => s + (+l.hectares||0), 0);
+      const nxt = et[i+1];
+      return `<section class="col t-${e.tipo}" data-etapa="${e.id}"><header><b><span>${esc(e.nome)}</span><span class="num">${cs.length}</span></b><span class="sub num">${nf.format(Math.round(ha))} ha</span></header>
+      <div class="cards">${cs.map(l => { const pe = proxEvento(l.id); return `<article class="card" draggable="true" data-lead="${l.id}">
+        <div class="top"><b>${esc(l.nome)}</b>${origemPill(l.origem)}</div>
+        <div class="meta">${esc([l.cultura, l.hectares?nf.format(l.hectares)+" ha":""].filter(Boolean).join(" · ")||"Sem cultura")}${l.produto?`<br>${esc(l.produto)}`:""}</div>
+        <div class="foot"><span class="sub">${pe?`📅 ${esc(fmtData(pe.data))} ${esc(pe.hora||"")}`:""}</span>${nxt?`<button class="adv" data-adv="${l.id}" data-to="${nxt.id}" title="Mover para ${esc(nxt.nome)}">Avançar ›</button>`:""}</div></article>`; }).join("") || `<span class="sub" style="text-align:center;padding:10px 0">Solte um card aqui</span>`}</div></section>`;
+    }).join("")}</div></div>`;
+  },
+  after(){
+    $$(".card[draggable]").forEach(c => {
+      c.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", c.dataset.lead); e.dataTransfer.effectAllowed = "move"; c.classList.add("drag"); });
+      c.addEventListener("dragend", () => c.classList.remove("drag"));
+    });
+    $$(".col[data-etapa]").forEach(col => {
+      col.addEventListener("dragover", e => { e.preventDefault(); col.classList.add("over"); });
+      col.addEventListener("dragleave", e => { if (!col.contains(e.relatedTarget)) col.classList.remove("over"); });
+      col.addEventListener("drop", e => { e.preventDefault(); col.classList.remove("over"); const id = e.dataTransfer.getData("text/plain"); if (id) moverEtapa(id, S.funilId, col.dataset.etapa); });
+    });
+  }
+};
+async function moverEtapa(leadId, funilId, etapaId){
+  const l = leadPorId(leadId); if (!l) return;
+  if (l.etapa === etapaId && l.funilId === funilId) return;
+  const f = S.funis.find(x => x.id === funilId); const e = (f?.etapas||[]).find(x => x.id === etapaId);
+  const now = new Date().toISOString();
+  const patch = {funilId, etapa:etapaId, atualizadoEm:now, fechadoEm: e && e.tipo !== "aberto" ? now : null};
+  await salvar(() => Store.update("leads", leadId, patch), `${l.nome} → ${e?e.nome:""}`);
+}
+
+// Relatórios
+V.relatorios = {
+  shell(){
+    const P = {"7":"Últimos 7 dias","30":"Últimos 30 dias","90":"Últimos 90 dias","mes":"Este mês","ano":"Este ano","tudo":"Todo o período"};
+    return `<div class="head"><div><h1>Relatórios</h1><p>Desempenho dos leads por origem, cultura, produto e responsável.</p></div>
+    <div class="tools"><select id="r-per" aria-label="Período">${Object.entries(P).map(([k,n]) => `<option value="${k}" ${S.rel.periodo===k?"selected":""}>${n}</option>`).join("")}</select>
+    <select id="r-org" aria-label="Origem"><option value="">Todas as origens</option>${Object.entries(ORIGENS).map(([k,o]) => `<option value="${k}" ${S.rel.origem===k?"selected":""}>${o.nome}</option>`).join("")}</select>
+    <button class="btn" data-act="csv">Exportar CSV</button></div></div><div id="vb"></div>`;
+  },
+  bind(){ $("#r-per").addEventListener("change", e => { S.rel.periodo = e.target.value; renderBody(); }); $("#r-org").addEventListener("change", e => { S.rel.origem = e.target.value; renderBody(); }); },
+  inicio(){ const p = S.rel.periodo, n = new Date(); if (p==="tudo") return new Date(0); if (p==="mes") return new Date(n.getFullYear(), n.getMonth(), 1); if (p==="ano") return new Date(n.getFullYear(),0,1); return daysAgo(+p); },
+  leads(){ const ini = this.inicio(); return S.leads.filter(l => new Date(l.criadoEm) >= ini && (!S.rel.origem || (ORIGENS[l.origem]?l.origem:"outro") === S.rel.origem)); },
+  body(){
+    const ls = this.leads(); const ini = this.inicio();
+    const g = ls.filter(l => statusDe(l)==="ganho"), p = ls.filter(l => statusDe(l)==="perdido"), a = ls.filter(l => statusDe(l)==="aberto");
+    const haG = g.reduce((s,l) => s+(+l.hectares||0),0), valG = g.reduce((s,l) => s+(+l.valor||0),0);
+    const evs = S.eventos.filter(e => parseYmd(e.data) >= ini && e.data <= hoje());
+    const evOk = evs.filter(e => e.concluido).length;
+    const kp = `<div class="grid g-kpi">
+      <div class="kpi"><span class="l">Leads no período</span><span class="v">${nf.format(ls.length)}</span><span class="d">${nf.format(a.length)} em andamento</span></div>
+      <div class="kpi"><span class="l">Vendas fechadas</span><span class="v">${nf.format(g.length)}</span><span class="d">${nf.format(Math.round(haG))} ha${valG?` · ${brl.format(valG)}`:""}</span></div>
+      <div class="kpi"><span class="l">Perdidos</span><span class="v">${nf.format(p.length)}</span><span class="d">conversão ${pct(g.length, g.length+p.length)}%</span></div>
+      <div class="kpi"><span class="l">Compromissos realizados</span><span class="v">${nf.format(evOk)}<small> / ${nf.format(evs.length)}</small></span><span class="d">até hoje no período</span></div></div>`;
+    const tabela = (titulo, chave, rot) => {
+      const grupos = {}; ls.forEach(l => { const k = chave(l) || "Não informado"; (grupos[k] ||= []).push(l); });
+      const rows = Object.entries(grupos).sort((x,y) => y[1].length - x[1].length);
+      if (!rows.length) return `<div class="panel"><h2>${titulo}</h2><div class="empty">Sem leads no período.</div></div>`;
+      return `<div class="panel"><h2>${titulo}</h2><div class="tbl-wrap"><table><thead><tr><th>${rot}</th><th class="r">Leads</th><th class="r">Andamento</th><th class="r">Vendas</th><th class="r">Perdidos</th><th class="r">Conversão</th><th class="r">Hectares</th></tr></thead><tbody>${rows.map(([k,arr]) => {
+        const gg = arr.filter(l => statusDe(l)==="ganho").length, pp = arr.filter(l => statusDe(l)==="perdido").length;
+        return `<tr><td>${chave===origemKey ? origemPill(k) : esc(k)}</td><td class="r">${arr.length}</td><td class="r">${arr.length-gg-pp}</td><td class="r">${gg}</td><td class="r">${pp}</td><td class="r">${gg+pp?pct(gg,gg+pp)+"%":"—"}</td><td class="r">${nf.format(Math.round(arr.reduce((s,l)=>s+(+l.hectares||0),0)))}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+    };
+    return `${kp}<div class="grid" style="margin-top:16px">${tabela("Por origem do lead", origemKey, "Origem")}<div class="grid g-2">${tabela("Por cultura", l => l.cultura, "Cultura")}${tabela("Por produto de interesse", l => l.produto, "Produto")}</div>${(S.master ? tabela("Por responsável", l => nomeUsuario(donoDe(l)), "Responsável") : "")}</div>`;
+  }
+};
+const origemKey = l => ORIGENS[l.origem] ? l.origem : "outro";
+
+async function exportarCsv(){
+  const ls = V.relatorios.leads();
+  if (!ls.length){ toast("Não há leads no período para exportar."); return; }
+  const cols = [["Nome",l=>l.nome],["Telefone",l=>l.telefone],["WhatsApp",l=>l.whatsapp],["E-mail",l=>l.email],["Cidade/UF",l=>l.cidade],["Cultura",l=>l.cultura],["Hectares",l=>l.hectares],["Produto de interesse",l=>l.produto],["Origem",l=>ORIGENS[origemKey(l)].nome],["Campanha",l=>l.campanha],["Funil",l=>funilDe(l)?.nome],["Etapa",l=>etapaDe(l)?.nome],["Valor estimado",l=>l.valor],["Responsável",l=>nomeUsuario(donoDe(l))],["Cadastro",l=>fmtIso(l.criadoEm)],["Observações",l=>l.observacoes]];
+  const q = v => { const s = String(v ?? ""); return /[;"\n\r]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s; };
+  const csv = "﻿" + [cols.map(c=>c[0]).join(";"), ...ls.map(l => cols.map(c => q(c[1](l))).join(";"))].join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  a.download = `leads-agrofuturo-${hoje()}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast("Arquivo exportado.");
+}
+
+// Configurações
+V.configuracoes = {
+  shell(){
+    const p = meuPerfil();
+    const ex = S.leads.filter(l => l.exemplo).length;
+    return `<div class="head"><div><h1>Configurações</h1><p>Seus dados aparecem como responsável nos clientes e nos relatórios.</p></div></div>
+    <div class="grid g-2" style="align-items:start">
+    <form class="panel" id="perfil"><h2>Meus dados</h2><div class="fgrid">
+      <label class="f full">Nome completo<input type="text" id="p-nome" value="${esc(p.nome || S.nomeConta)}" required></label>
+      <label class="f">Cargo<input type="text" id="p-cargo" value="${esc(p.cargo)}" placeholder="Consultor técnico de vendas"></label>
+      <label class="f">Empresa<input type="text" id="p-empresa" value="${esc(p.empresa)}" placeholder="Agrofuturo"></label>
+      <label class="f">Telefone<input type="tel" id="p-tel" value="${esc(p.telefone)}" placeholder="(34) 99999-0000"></label>
+      <label class="f">WhatsApp<input type="tel" id="p-wa" value="${esc(p.whatsapp)}"></label>
+      <label class="f">E-mail<input type="email" id="p-email" value="${esc(p.email)}"></label>
+      <label class="f">Região de atuação<input type="text" id="p-reg" value="${esc(p.regiao)}" placeholder="Triângulo Mineiro"></label>
+      <label class="f full">Assinatura para mensagens<textarea id="p-ass" placeholder="Ex.: Guilherme · Agrofuturo · (34) 99999-0000">${esc(p.assinatura)}</textarea></label>
+    </div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="btn pri" type="submit">Salvar meus dados</button></div></form>
+    <div class="grid">
+      <div class="panel"><h2>Sua conta</h2><p style="margin:0 0 12px" class="sub">${esc(S.email)} · ${S.master ? "Conta mestre: acesso a todos os usuários" : "Você vê apenas os seus clientes e compromissos"}</p>
+        <form id="senha" class="fgrid" style="align-items:end"><label class="f">Nova senha<input type="password" id="p-senha" minlength="6" autocomplete="new-password" placeholder="mínimo 6 caracteres"></label><button class="btn" type="submit">Alterar senha</button></form>
+        <button class="btn danger" data-act="sair" style="margin-top:12px">Sair da conta</button></div>
+      ${S.master ? `<div class="panel"><h2>Equipe <small>${Object.keys(S.usuarios).length} usuários</small></h2>${Object.keys(S.usuarios).length ? `<div class="list">${Object.entries(S.usuarios).map(([id,u]) => `<div class="li"><div class="what"><b>${esc(u.nome||"Sem nome")}${id===S.uid?' <span class="pill st-aberto">você</span>':""}</b><span class="sub">${esc([u.email,u.cargo,u.telefone].filter(Boolean).join(" · "))}</span></div><span class="sub num">${S.allLeads.filter(l=>donoDe(l)===id).length} clientes</span></div>`).join("")}</div>` : `<div class="empty">Nenhum usuário ainda.</div>`}<p class="sub" style="margin:10px 0 0">Para adicionar alguém, envie o link do sistema. A pessoa cria a conta na tela de login.</p></div>` : ""}
+      ${ex ? `<div class="panel"><h2>Dados de exemplo</h2><p class="sub" style="margin-top:0">Há ${ex} cliente${ex>1?"s":""} de exemplo marcado${ex>1?"s":""} com a etiqueta “exemplo”. Apague quando começar a usar com seus leads reais.</p><button class="btn danger" data-act="limpar-ex">Apagar ${ex} exemplo${ex>1?"s":""}</button></div>` : ""}
+    </div></div>`;
+  },
+  bind(){
+    $("#perfil").addEventListener("submit", async e => {
+      e.preventDefault();
+      const v = id => $("#"+id).value.trim();
+      const nome = v("p-nome"); if (!nome){ toast("Informe seu nome."); return; }
+      const data = {email:S.email, nome, cargo:v("p-cargo"), empresa:v("p-empresa"), telefone:v("p-tel"), whatsapp:v("p-wa"), email:v("p-email"), regiao:v("p-reg"), assinatura:v("p-ass"), atualizadoEm:new Date().toISOString()};
+      await salvar(() => Store.set("usuarios", S.uid, data), "Seus dados foram salvos.");
+    });
+    $("#senha").addEventListener("submit", async e => {
+      e.preventDefault(); const p = $("#p-senha").value;
+      if (p.length < 6){ toast("A senha precisa ter pelo menos 6 caracteres."); return; }
+      const {error} = await Store.sb.auth.updateUser({password:p});
+      toast(error ? "Não foi possível alterar: " + error.message : "Senha alterada."); if (!error) $("#p-senha").value = "";
+    });
+  },
+  body(){ return ""; }
+};
+
+// ---------- Modais ----------
+function abrirModal(html, cls=""){
+  const root = $("#modal-root");
+  root.innerHTML = `<div class="ov" data-ov="1"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`;
+  const first = root.querySelector("input,select,textarea"); if (first) setTimeout(() => first.focus(), 30);
+  return root.firstElementChild;
+}
+function fecharModal(){ $("#modal-root").innerHTML = ""; }
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#modal-root").innerHTML) fecharModal(); });
+$("#modal-root").addEventListener("mousedown", e => { if (e.target.dataset.ov) fecharModal(); });
+function armar(btn, fn){ // confirmação em dois cliques
+  if (btn.classList.contains("armed")) { fn(); return; }
+  btn.classList.add("armed"); const t = btn.textContent; btn.textContent = "Clique de novo para confirmar";
+  setTimeout(() => { if (btn.isConnected){ btn.classList.remove("armed"); btn.textContent = t; } }, 3500);
+}
+
+function modalLead(id){
+  const l = id ? leadPorId(id) : null;
+  const d = l || {origem:"meta", funilId:funisOrd()[0]?.id, _owner: S.verUsuario || S.uid};
+  const produtos = [...new Set(S.leads.map(x => x.produto).filter(Boolean))].sort();
+  const culturas = [...new Set([...CULTURAS, ...S.leads.map(x => x.cultura).filter(Boolean)])];
+  const fs = funisOrd();
+  const usuarios = Object.entries(S.usuarios).filter(([,u]) => u.nome);
+  const evs = l ? S.eventos.filter(e => e.leadId === l.id).sort((a,b) => (b.data+b.hora).localeCompare(a.data+a.hora)) : [];
+  const ov = abrirModal(`
+    <header><h2>${l ? esc(l.nome) : "Novo cliente"}</h2><button class="btn icon" data-close aria-label="Fechar">${svg(I_X)}</button></header>
+    <form id="lf"><div class="body">
+      <div class="sec-t">Contato</div>
+      <div class="fgrid">
+        <label class="f full">Nome do cliente *<input type="text" id="l-nome" value="${esc(d.nome)}" required placeholder="Ex.: João Ribeiro · Fazenda Santa Luzia"></label>
+        <label class="f">Telefone<input type="tel" id="l-tel" value="${esc(d.telefone)}" placeholder="(34) 99999-0000"></label>
+        <label class="f">WhatsApp<input type="tel" id="l-wa" value="${esc(d.whatsapp)}" placeholder="Igual ao telefone se vazio"></label>
+        <label class="f">E-mail<input type="email" id="l-email" value="${esc(d.email)}"></label>
+        <label class="f">Cidade / UF<input type="text" id="l-cidade" value="${esc(d.cidade)}" placeholder="Uberaba/MG"></label>
+      </div>
+      <div class="sec-t">Propriedade e interesse</div>
+      <div class="fgrid three">
+        <label class="f">Cultura<input type="text" id="l-cultura" list="dl-cult" value="${esc(d.cultura)}" placeholder="Soja"></label>
+        <label class="f">Hectares<input type="number" id="l-ha" min="0" step="0.1" value="${esc(d.hectares)}" placeholder="0"></label>
+        <label class="f">Valor estimado (R$)<input type="number" id="l-valor" min="0" step="1" value="${esc(d.valor)}" placeholder="opcional"></label>
+        <label class="f full">Produto de interesse<input type="text" id="l-prod" list="dl-prod" value="${esc(d.produto)}" placeholder="Ex.: Fertilizante foliar, semente, consultoria…"></label>
+      </div>
+      <datalist id="dl-cult">${culturas.map(c => `<option value="${esc(c)}">`).join("")}</datalist>
+      <datalist id="dl-prod">${produtos.map(c => `<option value="${esc(c)}">`).join("")}</datalist>
+      <div class="sec-t">Origem e funil</div>
+      <div class="fgrid">
+        <label class="f">Origem do lead<select id="l-origem">${Object.entries(ORIGENS).map(([k,o]) => `<option value="${k}" ${d.origem===k?"selected":""}>${o.nome}</option>`).join("")}</select></label>
+        <label class="f">Campanha / detalhe<input type="text" id="l-camp" value="${esc(d.campanha)}" placeholder="Ex.: Campanha Safra 26/27"></label>
+        <label class="f">Funil<select id="l-funil">${fs.length ? fs.map(f => `<option value="${f.id}" ${(d.funilId||fs[0].id)===f.id?"selected":""}>${esc(f.nome)}</option>`).join("") : `<option value="">Crie um funil em Funis</option>`}</select></label>
+        <label class="f">Etapa<select id="l-etapa"></select></label>
+        ${S.master ? `<label class="f full">Responsável<select id="l-resp">${Object.entries(S.usuarios).map(([id]) => `<option value="${id}" ${donoDe(d)===id?"selected":""}>${esc(nomeUsuario(id)||"Usuário sem nome")}${id===S.uid?" (você)":""}</option>`).join("")}${S.usuarios[S.uid]?"":`<option value="${S.uid}" ${donoDe(d)===S.uid?"selected":""}>Eu</option>`}</select></label>` : ""}
+      </div>
+      <label class="f full">Observações<textarea id="l-obs" placeholder="Anotações da conversa, necessidades, safra, concorrentes…">${esc(d.observacoes)}</textarea></label>
+      ${l ? `<div><div class="sec-t" style="margin-bottom:6px">Compromissos</div>${evs.length ? `<div class="list">${evs.map(evLi).join("")}</div>` : `<p class="sub" style="margin:0">Nenhum compromisso com este cliente.</p>`}</div>
+      <p class="sub" style="margin:0">Cadastrado em ${fmtIso(l.criadoEm)}${l.atualizadoEm?` · atualizado em ${fmtIso(l.atualizadoEm)}`:""}</p>` : ""}
+    </div>
+    <footer>${l ? `<button type="button" class="btn danger sp" id="l-del">Excluir</button>` : `<span class="sp"></span>`}
+      ${l && waLink(l.whatsapp||l.telefone) ? `<a class="btn wa" href="${waLink(l.whatsapp||l.telefone)}" target="_blank" rel="noopener">${svg(I_WA)}WhatsApp</a>`:""}
+      ${l ? `<button type="button" class="btn" id="l-ag">Agendar</button>` : ""}
+      <button type="button" class="btn" data-close>Cancelar</button><button type="submit" class="btn pri">${l?"Salvar":"Cadastrar cliente"}</button></footer></form>`);
+  const fillEtapas = () => {
+    const f = S.funis.find(x => x.id === $("#l-funil").value);
+    $("#l-etapa").innerHTML = (f?.etapas||[]).map(e => `<option value="${e.id}" ${(l && l.funilId===f.id && l.etapa===e.id)?"selected":""}>${esc(e.nome)}</option>`).join("") || `<option value="">—</option>`;
+  };
+  fillEtapas(); $("#l-funil").addEventListener("change", fillEtapas);
+  ov.addEventListener("click", e => {
+    if (e.target.closest("[data-close]")) fecharModal();
+    const ev = e.target.closest("[data-ev]"); if (ev) modalEvento(ev.dataset.ev);
+  });
+  if (l){
+    $("#l-del").addEventListener("click", e => armar(e.currentTarget, async () => { if (await salvar(() => Store.del("leads", l.id), "Cliente excluído.")) fecharModal(); }));
+    $("#l-ag").addEventListener("click", () => modalEvento(null, {leadId:l.id}));
+  }
+  $("#lf").addEventListener("submit", async e => {
+    e.preventDefault();
+    const v = k => $("#"+k).value.trim();
+    const nome = v("l-nome"); if (!nome){ toast("Informe o nome do cliente."); return; }
+    const funilId = v("l-funil") || null, etapa = v("l-etapa") || null;
+    const f = S.funis.find(x => x.id === funilId); const et = (f?.etapas||[]).find(x => x.id === etapa);
+    const now = new Date().toISOString();
+    const data = {...(l||{}), nome, telefone:v("l-tel"), whatsapp:v("l-wa"), email:v("l-email"), cidade:v("l-cidade"), cultura:v("l-cultura"),
+      hectares: v("l-ha") ? +v("l-ha") : null, valor: v("l-valor") ? +v("l-valor") : null, produto:v("l-prod"), origem:v("l-origem"), campanha:v("l-camp"),
+      funilId, etapa, responsavel: S.master && $("#l-resp") ? $("#l-resp").value : (l ? donoDe(l) : S.uid), observacoes:$("#l-obs").value, atualizadoEm:now, criadoEm:l?.criadoEm || now};
+    delete data.id;
+    if (!l || l.etapa !== etapa || l.funilId !== funilId) data.fechadoEm = et && et.tipo !== "aberto" ? now : null;
+    const id = l ? l.id : uid("l");
+    const dono = S.master ? data.responsavel : null;
+    if (await salvar(() => Store.set("leads", id, data, dono), l ? "Cliente atualizado." : "Cliente cadastrado.")) fecharModal();
+  });
+}
+
+function modalEvento(id, pre={}){
+  const e = id ? S.eventos.find(x => x.id === id) : null;
+  const d = e || {tipo:"ligacao", data:pre.data || S.agRef || hoje(), hora:"09:00", leadId:pre.leadId || ""};
+  const ls = [...S.leads].sort((a,b) => String(a.nome).localeCompare(b.nome));
+  const ov = abrirModal(`<header><h2>${e?"Editar compromisso":"Novo compromisso"}</h2><button class="btn icon" data-close aria-label="Fechar">${svg(I_X)}</button></header>
+    <form id="ef"><div class="body"><div class="fgrid">
+      <label class="f full">Cliente<select id="e-lead"><option value="">Sem cliente vinculado</option>${ls.map(l => `<option value="${l.id}" ${d.leadId===l.id?"selected":""}>${esc(l.nome)}${l.cidade?" · "+esc(l.cidade):""}</option>`).join("")}</select></label>
+      <label class="f">Tipo<select id="e-tipo">${Object.entries(TIPOS_EV).map(([k,n]) => `<option value="${k}" ${d.tipo===k?"selected":""}>${n}</option>`).join("")}</select></label>
+      <label class="f">Título<input type="text" id="e-tit" value="${esc(d.titulo)}" placeholder="Opcional: usa o tipo e o cliente"></label>
+      <label class="f">Data<input type="date" id="e-data" value="${esc(d.data)}" required></label>
+      <label class="f">Hora<input type="time" id="e-hora" value="${esc(d.hora)}"></label>
+      <label class="f full">Anotações<textarea id="e-notas" placeholder="O que falar, melhor horário para ligar…">${esc(d.notas)}</textarea></label>
+      <label class="chk"><input type="checkbox" id="e-ok" ${d.concluido?"checked":""}> Finalizado</label>
+    </div></div>
+    <footer>${e ? `<button type="button" class="btn danger sp" id="e-del">Excluir</button>` : `<span class="sp"></span>`}<button type="button" class="btn" data-close>Cancelar</button><button type="submit" class="btn pri">${e?"Salvar":"Marcar"}</button></footer></form>`, "narrow");
+  ov.addEventListener("click", ev => { if (ev.target.closest("[data-close]")) fecharModal(); });
+  if (e) $("#e-del").addEventListener("click", ev => armar(ev.currentTarget, async () => { if (await salvar(() => Store.del("eventos", e.id), "Compromisso excluído.")) fecharModal(); }));
+  $("#ef").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const leadId = $("#e-lead").value || null, tipo = $("#e-tipo").value; const l = leadPorId(leadId);
+    const titulo = $("#e-tit").value.trim() || (TIPOS_EV[tipo] + (l ? " · " + l.nome.split("·")[0].trim() : ""));
+    const data = {titulo, tipo, data:$("#e-data").value, hora:$("#e-hora").value, leadId, notas:$("#e-notas").value, concluido:$("#e-ok").checked, criadoPor:e?.criadoPor || S.uid, criadoEm:e?.criadoEm || new Date().toISOString()};
+    if (!data.data){ toast("Escolha a data."); return; }
+    const dono = S.master ? (l ? donoDe(l) : (e?._owner || S.verUsuario || S.uid)) : null;
+    const ok = await salvar(() => Store.set("eventos", e ? e.id : uid("e"), data, dono), e ? "Compromisso atualizado." : "Compromisso marcado.");
+    if (ok){ if (leadId) Store.update("leads", leadId, {atualizadoEm:new Date().toISOString()}).catch(()=>{}); S.agRef = data.data; fecharModal(); if (S.view==="agenda") renderBody(); }
+  });
+}
+
+function modalFunil(id){
+  const f = id ? S.funis.find(x => x.id === id) : null;
+  let etapas = f ? (f.etapas||[]).map(e => ({...e})) : [{id:uid("s"),nome:"Novo lead",tipo:"aberto"},{id:uid("s"),nome:"Em contato",tipo:"aberto"},{id:uid("s"),nome:"Venda fechada",tipo:"ganho"},{id:uid("s"),nome:"Perdido",tipo:"perdido"}];
+  const usados = f ? S.leads.filter(l => funilDe(l)?.id === f.id).length : 0;
+  const ov = abrirModal(`<header><h2>${f?"Editar funil":"Novo funil"}</h2><button class="btn icon" data-close aria-label="Fechar">${svg(I_X)}</button></header>
+    <form id="ff"><div class="body"><label class="f">Nome do funil<input type="text" id="fn-nome" value="${esc(f?.nome)}" required placeholder="Ex.: Revenda de sementes"></label>
+    <div><div class="sec-t" style="margin-bottom:10px">Etapas, na ordem</div><div class="stages" id="stg"></div>
+    <button type="button" class="btn sm" id="st-add" style="margin-top:10px">${svg(I_PLUS)}Adicionar etapa</button></div></div>
+    <footer>${f ? `<button type="button" class="btn danger sp" id="fn-del">Excluir funil</button>` : `<span class="sp"></span>`}<button type="button" class="btn" data-close>Cancelar</button><button type="submit" class="btn pri">Salvar funil</button></footer></form>`);
+  const draw = () => {
+    $("#stg").innerHTML = etapas.map((e,i) => `<div class="stage-row" data-i="${i}"><input type="text" id="st-n-${e.id}" value="${esc(e.nome)}" aria-label="Nome da etapa" data-k="nome"><select id="st-t-${e.id}" data-k="tipo" aria-label="Tipo da etapa">${Object.entries(TIPO_ETAPA).map(([k,n]) => `<option value="${k}" ${e.tipo===k?"selected":""}>${n}</option>`).join("")}</select>
+      <span style="display:flex;gap:4px"><button type="button" class="btn sm" data-mv="-1" aria-label="Subir" ${i===0?"disabled":""}>↑</button><button type="button" class="btn sm" data-mv="1" aria-label="Descer" ${i===etapas.length-1?"disabled":""}>↓</button><button type="button" class="btn sm" data-rm aria-label="Remover etapa">${svg(I_X)}</button></span></div>`).join("");
+  };
+  draw();
+  $("#stg").addEventListener("input", e => { const r = e.target.closest("[data-i]"); if (r) etapas[+r.dataset.i][e.target.dataset.k] = e.target.value; });
+  $("#stg").addEventListener("change", e => { const r = e.target.closest("[data-i]"); if (r) etapas[+r.dataset.i][e.target.dataset.k] = e.target.value; });
+  $("#stg").addEventListener("click", e => {
+    const r = e.target.closest("[data-i]"); if (!r) return; const i = +r.dataset.i;
+    const mv = e.target.closest("[data-mv]"); if (mv){ const j = i + +mv.dataset.mv; [etapas[i], etapas[j]] = [etapas[j], etapas[i]]; draw(); }
+    if (e.target.closest("[data-rm]")){
+      const n = f ? S.leads.filter(l => l.funilId === f.id && l.etapa === etapas[i].id).length : 0;
+      if (n){ toast(`Mova os ${n} cliente(s) desta etapa antes de removê-la.`); return; }
+      if (etapas.length <= 1){ toast("O funil precisa de pelo menos uma etapa."); return; }
+      etapas.splice(i,1); draw();
+    }
+  });
+  $("#st-add").addEventListener("click", () => { const k = etapas.findIndex(e => e.tipo !== "aberto"); const novo = {id:uid("s"), nome:"Nova etapa", tipo:"aberto"}; if (k<0) etapas.push(novo); else etapas.splice(k,0,novo); draw(); $("#st-n-"+novo.id).select(); });
+  ov.addEventListener("click", e => { if (e.target.closest("[data-close]")) fecharModal(); });
+  if (f) $("#fn-del").addEventListener("click", e => {
+    if (usados){ toast(`Este funil tem ${usados} cliente(s). Mova-os para outro funil antes de excluir.`); return; }
+    armar(e.currentTarget, async () => { if (await salvar(() => Store.del("funis", f.id), "Funil excluído.")){ S.funilId = null; fecharModal(); renderView(); } });
+  });
+  $("#ff").addEventListener("submit", async e => {
+    e.preventDefault();
+    const nome = $("#fn-nome").value.trim(); if (!nome){ toast("Dê um nome ao funil."); return; }
+    const et = etapas.map(x => ({id:x.id, nome:(x.nome||"").trim() || "Etapa", tipo:x.tipo}));
+    const nid = f ? f.id : uid("f");
+    const ordem = f?.ordem ?? (Math.max(0, ...S.funis.map(x => x.ordem||0)) + 1);
+    if (await salvar(() => Store.set("funis", nid, {nome, etapas:et, ordem}), "Funil salvo.")){ S.funilId = nid; fecharModal(); renderView(); }
+  });
+}
+
+// ---------- Ações globais ----------
+document.addEventListener("click", async e => {
+  if (e.target.closest("[data-stop]")) return;
+  const act = e.target.closest("[data-act]");
+  if (act){
+    const a = act.dataset.act;
+    if (a === "novo-lead") modalLead(null);
+    else if (a === "novo-ev") modalEvento(null, {data:act.dataset.dia});
+    else if (a === "novo-funil") modalFunil(null);
+    else if (a === "edit-funil") modalFunil(S.funilId);
+    else if (a === "funil-padrao"){ const id = "comercial"; if (await salvar(() => Store.set("funis", id, FUNIL_PADRAO), "Funil criado.")){ S.funilId = id; renderView(); } }
+    else if (a === "csv") exportarCsv();
+    else if (a === "sair"){ await Store.sb.auth.signOut(); location.reload(); }
+    else if (a === "limpar-ex") armar(act, async () => { const ex = S.leads.filter(l => l.exemplo); for (const l of ex){ await Store.del("leads", l.id).catch(()=>{}); } for (const ev of S.eventos.filter(x => ex.some(l => l.id === x.leadId))){ await Store.del("eventos", ev.id).catch(()=>{}); } toast("Exemplos apagados."); renderView(); });
+    return;
+  }
+  if ($("#modal-root").contains(e.target)) return;
+  const g = e.target.closest("[data-go]"); if (g){ e.preventDefault(); go(g.dataset.go); return; }
+  const adv = e.target.closest("[data-adv]"); if (adv){ moverEtapa(adv.dataset.adv, S.funilId, adv.dataset.to); return; }
+  const fin = e.target.closest("[data-fin]"); if (fin){ finalizarEv(fin.dataset.fin, true); return; }
+  const rea = e.target.closest("[data-reabrir]"); if (rea){ finalizarEv(rea.dataset.reabrir, false); return; }
+  const rg = e.target.closest("[data-reag]"); if (rg){ modalReagendar(rg.dataset.reag); return; }
+  const md = e.target.closest("[data-modo]"); if (md){ S.agModo = md.dataset.modo; renderBody(); return; }
+  const nv = e.target.closest("[data-nav]"); if (nv){ const n = +nv.dataset.nav; if (n===0) S.agRef = hoje(); else if (S.agModo==="dia") S.agRef = addDias(S.agRef, n); else if (S.agModo==="semana") S.agRef = addDias(S.agRef, 7*n); else { const r = parseYmd(S.agRef); S.agRef = ymd(new Date(r.getFullYear(), r.getMonth()+n, 1)); } renderBody(); return; }
+  const ev = e.target.closest("[data-ev]"); if (ev){ modalEvento(ev.dataset.ev); return; }
+  const dia = e.target.closest("[data-dia]"); if (dia){ S.agRef = dia.dataset.dia; if (dia.dataset.modoDia) S.agModo = "dia"; renderBody(); return; }
+  const ld = e.target.closest("[data-lead]"); if (ld){ modalLead(ld.dataset.lead); return; }
+});
+document.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches?.("[data-dia][role=button]")){ e.preventDefault(); S.agRef = e.target.dataset.dia; if (e.target.dataset.modoDia) S.agModo = "dia"; renderBody(); const el = $(`.day[data-dia="${S.agRef}"]`); el && el.focus(); } });
+
+// ---------- Inicialização ----------
+let rT;
+function onData(){
+  clearTimeout(rT);
+  rT = setTimeout(() => {
+    if (!S.ready.leads || !S.ready.funis || !S.ready.eventos) return;
+    const ae = document.activeElement;
+    const typing = ae && $("#main").contains(ae) && ae.matches("input,textarea,select");
+    // Formulários de Configurações: não redesenha enquanto o usuário edita
+    if (S.view === "configuracoes" && typing) return;
+    if (!$("#vb")) renderView(); else if (S.view === "configuracoes") renderView(); else renderBody();
+    $("#who").textContent = meuPerfil().nome || S.nomeConta || S.email || "";
+  }, 30);
+}
+function aplicarFiltro(){
+  const u = S.verUsuario;
+  S.leads = u ? S.allLeads.filter(l => donoDe(l) === u) : S.allLeads;
+  S.eventos = u ? S.allEventos.filter(e => e._owner === u) : S.allEventos;
+}
+function telaLogin(modo, aviso){
+  const box = $("#login"); box.hidden = false; $("#app").hidden = true;
+  const t = {entrar:["Entrar","Acesse sua agenda de leads."], criar:["Criar conta","Cadastre-se para ter sua própria agenda."], esqueci:["Recuperar senha","Enviaremos um link para o seu e-mail."], nova:["Nova senha","Digite a nova senha da sua conta."]}[modo];
+  box.innerHTML = `<div class="login-card"><img src="logo.webp" alt="Agrofuturo Fertilizantes"><h1>${t[0]}</h1><p>${t[1]}</p>
+    ${aviso ? `<div class="msg ${aviso[0]}">${esc(aviso[1])}</div>` : ""}
+    <form id="lg">
+      ${modo==="criar" ? `<label class="f">Seu nome<input type="text" id="lg-nome" required autocomplete="name"></label>` : ""}
+      ${modo!=="nova" ? `<label class="f">E-mail<input type="email" id="lg-email" required autocomplete="email"></label>` : ""}
+      ${modo!=="esqueci" ? `<label class="f">Senha<input type="password" id="lg-senha" required minlength="6" autocomplete="${modo==="entrar"?"current-password":"new-password"}"></label>` : ""}
+      <button class="btn pri" type="submit">${{entrar:"Entrar",criar:"Criar conta",esqueci:"Enviar link",nova:"Salvar nova senha"}[modo]}</button>
+    </form>
+    <p>${modo==="entrar" ? `<button class="linkbtn" data-lg="criar">Criar conta</button> · <button class="linkbtn" data-lg="esqueci">Esqueci minha senha</button>` : modo==="nova" ? "" : `<button class="linkbtn" data-lg="entrar">Voltar para o login</button>`}</p></div>`;
+  box.querySelectorAll("[data-lg]").forEach(b => b.addEventListener("click", () => telaLogin(b.dataset.lg)));
+  $("#lg").addEventListener("submit", async e => {
+    e.preventDefault();
+    const btn = e.submitter || $("#lg button"); btn.disabled = true;
+    const email = $("#lg-email")?.value.trim(), senha = $("#lg-senha")?.value;
+    let r;
+    if (modo === "entrar") r = await Store.sb.auth.signInWithPassword({email, password:senha});
+    else if (modo === "criar") r = await Store.sb.auth.signUp({email, password:senha, options:{data:{nome:$("#lg-nome").value.trim()}, emailRedirectTo:location.origin + location.pathname}});
+    else if (modo === "esqueci") r = await Store.sb.auth.resetPasswordForEmail(email, {redirectTo:location.origin + location.pathname});
+    else r = await Store.sb.auth.updateUser({password:senha});
+    btn.disabled = false;
+    const err = r.error;
+    if (err){ const m = /invalid login/i.test(err.message) ? "E-mail ou senha incorretos." : /not confirmed/i.test(err.message) ? "Confirme seu e-mail antes de entrar. Veja sua caixa de entrada." : /already registered/i.test(err.message) ? "Este e-mail já tem conta. Faça login." : err.message; telaLogin(modo, ["err", m]); if ($("#lg-email") && email) $("#lg-email").value = email; return; }
+    if (modo === "criar" && !r.data.session) telaLogin("entrar", ["ok", "Conta criada. Enviamos um e-mail de confirmação; confirme e depois entre."]);
+    else if (modo === "esqueci") telaLogin("entrar", ["ok", "Se o e-mail tiver conta, você receberá o link para criar uma nova senha."]);
+    else if (modo === "nova") iniciar(r.data.user);
+  });
+  const f = box.querySelector("input"); f && f.focus();
+}
+let iniciado = false;
+async function iniciar(user){
+  if (iniciado) return; iniciado = true;
+  $("#login").hidden = true; $("#app").hidden = false;
+  S.uid = user.id; S.email = (user.email||"").toLowerCase();
+  S.master = S.email === String(window.AGRO_CONFIG.MASTER_EMAIL||"").toLowerCase();
+  S.nomeConta = user.user_metadata?.nome || "";
+  S.allLeads = []; S.allEventos = []; S.verUsuario = "";
+  const m = $("#mode"); m.className = "mode nuvem"; m.lastElementChild.textContent = S.master ? "Conta mestre" : "Conectado";
+  const h = (location.hash||"").slice(1); if (VIEWS.some(v => v[0] === h)) S.view = h;
+  renderNav();
+  Store.watch("leads", arr => { S.allLeads = arr; aplicarFiltro(); S.ready.leads = true; onData(); });
+  Store.watch("eventos", arr => { S.allEventos = arr; aplicarFiltro(); S.ready.eventos = true; onData(); });
+  Store.watch("funis", arr => { S.funis = arr; S.ready.funis = true; onData(); });
+  let perfilCriado = false;
+  Store.watch("usuarios", arr => {
+    const o = {}; arr.forEach(u => { o[u.id] = u; }); S.usuarios = o;
+    if (!o[S.uid] && !perfilCriado){ perfilCriado = true; Store.set("usuarios", S.uid, {email:S.email, nome:S.nomeConta, criadoEm:new Date().toISOString()}).catch(()=>{}); }
+    onData();
+  });
+}
+async function boot(){
+  const cfg = window.AGRO_CONFIG || {};
+  if (!window.supabase || !cfg.SUPABASE_URL || /COLE/.test(cfg.SUPABASE_URL)){
+    $("#login").hidden = false;
+    $("#login").innerHTML = `<div class="login-card"><img src="logo.webp" alt=""><h1>Falta configurar</h1><p>Abra o arquivo config.js e cole a URL e a chave pública (anon key) do seu projeto Supabase.</p></div>`;
+    return;
+  }
+  Store.sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  Store.sb.auth.onAuthStateChange((ev, session) => {
+    if (ev === "PASSWORD_RECOVERY") { iniciado = false; telaLogin("nova"); return; }
+    if (ev === "SIGNED_OUT") location.reload();
+  });
+  const {data} = await Store.sb.auth.getSession();
+  if (/type=recovery/.test(location.hash)) return; // o evento PASSWORD_RECOVERY abre a tela de nova senha
+  if (data.session) iniciar(data.session.user); else telaLogin("entrar");
+}
+boot();
+})();
+</script>
+</body>
+</html>
